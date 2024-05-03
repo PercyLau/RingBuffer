@@ -43,45 +43,41 @@ int main(){
             unsigned long long ack_time;
     };
 
-    RingBuffer<packet_info> rb;
+    ring_buffer<packet_info> rb;
     for(int i = 0; i< 19; i++){
        packet_info p(i,"test",128,0,0);
-       rb.PushFront(p);
-       std::cout<<"add elements... size: "<< rb.Size() << "cap: "<< rb.Capacity() << std::endl;
+       rb.push_back(p);
+       std::cout<<"add elements... size: "<< rb.size() << ", cap: "<< rb.capacity() << std::endl;
     }
 
     for(int i = 0; i < 5; i++){
-        ErrNo s;
-        auto p = rb.Back(s);
-        std::cout<<"to pop elements...seq: "<<p.get_seq()<<" rest size: "<<rb.Size()<<" cap: "<<rb.Capacity()<<std::endl;
-        rb.PopBack();
+        auto p = rb.back();
+        std::cout<<"to front pop elements...seq: "<<p.get_seq()<<", rest size: "<<rb.size()<<", cap: "<<rb.capacity()<<std::endl;
+        rb.pop_front();
     }
 
     for(int i = 0; i < 10; i++){
-        ErrNo s;
-        auto p = rb.Back(s);
-        std::cout<<"pop elements...seq: "<<p.get_seq()<<"rest size: "<<rb.Size()<<"cap: "<<rb.Capacity()<<std::endl;
-        rb.PopBack();
+        auto p = rb.front();
+        std::cout<<"pop back elements...seq: "<<p.get_seq()<<", rest size: "<<rb.size()<<", cap: "<<rb.capacity()<<std::endl;
+        rb.pop_back();
     }
 
     for(int i = 0; i< 15; i++){
        packet_info p(i+100,"test",128,0,0);
-       std::cout<<"add elements seq: "<< p.get_seq() << "buffer size: "<< rb.Size() << "cap: "<< rb.Capacity() << std::endl;
-       rb.PushFront(p);
+       std::cout<<"add elements seq: "<< p.get_seq() << ", buffer size: "<< rb.size() << ", cap: "<< rb.capacity() << std::endl;
+       rb.push_back(p);
     }
 
     for(int i = 0; i < 5; i++){
-        ErrNo s;
-        auto p = rb.Back(s);
-        std::cout<<"pop elements...seq: "<<p.get_seq()<<"rest size: "<<rb.Size()<<"cap: "<<rb.Capacity()<<std::endl;
-        rb.PopBack();
+        auto p = rb.back();
+        std::cout<<"pop front elements...seq: "<<p.get_seq()<<", rest size: "<<rb.size()<<", cap: "<<rb.capacity()<<std::endl;
+        rb.pop_front();
     }
 
-    while(rb.Capacity()>0){
-        ErrNo s;
-        auto p = rb.Back(s);
-        std::cout<<"to pop elements...seq: "<<p.get_seq()<<"rest size: "<<rb.Size()<<"cap: "<<rb.Capacity()<<std::endl;
-        rb.PopBack();
+    while(rb.capacity()>0){
+        auto p = rb.back();
+        std::cout<<"to pop elements...seq: "<<p.get_seq()<<", rest size: "<<rb.size()<<", cap: "<<rb.capacity()<<std::endl;
+        rb.pop_back();
     }
 
     return 0;
